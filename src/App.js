@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./styles.css"
 
 function Square() {
   const [value, setValue] = useState(null);
