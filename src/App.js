@@ -1,10 +1,37 @@
-import "./styles.css";
+import { useState } from "react";
 
-export default function App() {
+function Square() {
+  const [value, setValue] = useState(null);
+
+  function handleClick() {
+    setValue("X");
+  }
+
   return (
-    <div className="App">
-      <h1>Hello CodeSandbox</h1>
-      <h2>Start editing to see some magic happen!</h2>
-    </div>
+    <button className="square" onClick={handleClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+    </>
   );
 }
