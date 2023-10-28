@@ -93,9 +93,12 @@ export default function Game() {
                 <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
             </div>
             <div className="game-info">
-                <button onClick={handleToggleSort}>
-                    Toggle Sort: {isAscending ? "Ascending" : "Descending"}
-                </button>
+                Descending Sort:
+                <input
+                    type="checkbox"
+                    checked={!isAscending}
+                    onChange={handleToggleSort}
+                />
                 <ol>{isAscending ? moves : moves.reverse()}</ol>
             </div>
         </div>
