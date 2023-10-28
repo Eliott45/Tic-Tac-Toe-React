@@ -26,6 +26,7 @@ function Board({ xIsNext, squares, onPlay }) {
 
     let status;
     status = winner.winner ? "Winner: " + winner.winner : "Next player: " + (xIsNext ? "X" : "O");
+    status = !hasEmptySquares(squares) ? "Draw" : status;
 
     const renderSquare = (i) => {
         const isWinnerSquare = winner.winningSquares.includes(i);
@@ -119,4 +120,8 @@ function calculateWinner(squares) {
         winner: null,
         winningSquares: []
     };
+}
+
+function hasEmptySquares(squares) {
+    return squares.some(square => square === null);
 }
