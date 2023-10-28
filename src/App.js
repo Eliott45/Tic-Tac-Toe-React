@@ -55,11 +55,16 @@ export default function Game() {
     const [currentMove, setCurrentMove] = useState(0);
     const xIsNext = currentMove % 2 === 0;
     const currentSquares = history[currentMove];
+    const [isAscending, setAscending] = useState(true);
 
     function handlePlay(nextSquares) {
         const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
         setHistory(nextHistory);
         setCurrentMove(nextHistory.length - 1);
+    }
+
+    function handleToggleSort() {
+        setAscending(!isAscending);
     }
 
     function jumpTo(nextMove) {
@@ -88,7 +93,10 @@ export default function Game() {
                 <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
             </div>
             <div className="game-info">
-                <ol>{moves}</ol>
+                <button onClick={handleToggleSort}>
+                    Toggle Sort: {isAscending ? "Ascending" : "Descending"}
+                </button>
+                <ol>{isAscending ? moves : moves.reverse()}</ol>
             </div>
         </div>
     );
