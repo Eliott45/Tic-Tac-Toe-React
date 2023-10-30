@@ -4,8 +4,8 @@ import "./styles.css"
 export default function Game() {
     const [history, setHistory] = useState([Array(9).fill(null)]);
     const [currentMove, setCurrentMove] = useState(0);
-    const [xIsNext] = useState(currentMove % 2 === 0);
-    const [currentSquares] = history[currentMove];
+    const xIsNext = currentMove % 2 === 0;
+    const currentSquares = history[currentMove];
     const [isAscending, setAscending] = useState(true);
 
     function handlePlay(nextSquares) {
@@ -73,8 +73,8 @@ function Board({ xIsNext, squares, onPlay }) {
     const renderSquare = (i) => {
         const isWinnerSquare = winner.winningSquares.includes(i);
         return <Square key={i} value={squares[i]} onSquareClick={() => handleClick(i)} isWinnerSquare={isWinnerSquare} />;
-
     };
+
     const rows = [];
     for (let i = 0; i < 3; i++) {
         const row = [];
@@ -90,7 +90,6 @@ function Board({ xIsNext, squares, onPlay }) {
             {rows}
         </>
     );
-
 }
 
 function Square({ value, onSquareClick, isWinnerSquare}) {
