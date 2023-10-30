@@ -1,60 +1,11 @@
 import { useState } from "react";
 import "./styles.css"
 
-function Square({ value, onSquareClick, isWinnerSquare}) {
-    return (
-        <button className={`square ${isWinnerSquare ? 'square-win' : ''}`} onClick={onSquareClick}>
-            {value}
-        </button>
-    );
-}
-
-function Board({ xIsNext, squares, onPlay }) {
-    const winner = calculateWinner(squares);
-
-    function handleClick(i) {
-        if (winner.winner || squares[i]) {
-            return;
-        }
-
-        const nextSquares = squares.slice();
-
-        nextSquares[i] = xIsNext ? "X" : "O";
-
-        onPlay(nextSquares);
-    }
-
-    let status;
-    status = winner.winner ? "Winner: " + winner.winner : "Next player: " + (xIsNext ? "X" : "O");
-    status = !hasEmptySquares(squares) ? "Draw" : status;
-
-    const renderSquare = (i) => {
-        const isWinnerSquare = winner.winningSquares.includes(i);
-        return <Square key={i} value={squares[i]} onSquareClick={() => handleClick(i)} isWinnerSquare={isWinnerSquare} />;
-    };
-
-    const rows = [];
-    for (let i = 0; i < 3; i++) {
-        const row = [];
-        for (let j = 0; j < 3; j++) {
-            row.push(renderSquare(i * 3 + j));
-        }
-        rows.push(<div className="board-row" key={i}>{row}</div>);
-    }
-
-    return (
-        <>
-            <div className="status">{status}</div>
-            {rows}
-        </>
-    );
-}
-
 export default function Game() {
     const [history, setHistory] = useState([Array(9).fill(null)]);
     const [currentMove, setCurrentMove] = useState(0);
-    const xIsNext = currentMove % 2 === 0;
-    const currentSquares = history[currentMove];
+    const [xIsNext] = useState(currentMove % 2 === 0);
+    const [currentSquares] = history[currentMove];
     const [isAscending, setAscending] = useState(true);
 
     function handlePlay(nextSquares) {
@@ -103,6 +54,59 @@ export default function Game() {
             </div>
         </div>
     );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+    const winner = calculateWinner(squares);
+
+    function handleClick(i) {
+        if (winner.winner || squares[i]) {
+            return;
+        }
+
+        const nextSquares = squares.slice();
+
+        nextSquares[i] = xIsNext ? "X" : "O";
+        onPlay(nextSquares);
+    }
+
+    const renderSquare = (i) => {
+        const isWinnerSquare = winner.winningSquares.includes(i);
+        return <Square key={i} value={squares[i]} onSquareClick={() => handleClick(i)} isWinnerSquare={isWinnerSquare} />;
+
+    };
+    const rows = [];
+    for (let i = 0; i < 3; i++) {
+        const row = [];
+        for (let j = 0; j < 3; j++) {
+            row.push(renderSquare(i * 3 + j));
+        }
+        rows.push(<div className="board-row" key={i}>{row}</div>);
+
+    }
+    return (
+        <>
+            <div className="status">{getGameStatusMessage(winner.winner, xIsNext, hasEmptySquares(squares))}</div>
+            {rows}
+        </>
+    );
+
+}
+
+function Square({ value, onSquareClick, isWinnerSquare}) {
+    return (
+        <button className={`square ${isWinnerSquare ? 'square-win' : ''}`} onClick={onSquareClick}>
+            {value}
+        </button>
+    );
+}
+
+function getGameStatusMessage(winner, xIsNext, hasEmptySquares) {
+    if (winner) {
+        return "Winner: " + winner;
+    } else {
+        return !hasEmptySquares ? "Draw" : "Next player: " + (xIsNext ? "X" : "O");
+    }
 }
 
 function calculateWinner(squares) {
